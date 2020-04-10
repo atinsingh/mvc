@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import java.util.List;
 
 @Entity
 @EqualsAndHashCode
@@ -22,5 +24,8 @@ public class Course {
     private String description;
 
     private Integer registeredCount;
+
+    @ManyToMany(targetEntity = Student.class)
+    private List<Student> students;
 
 }

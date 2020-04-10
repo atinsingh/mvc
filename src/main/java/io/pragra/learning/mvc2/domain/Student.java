@@ -22,9 +22,8 @@ public class Student implements Serializable {
 
     private String name;
 
-//    @ManyToOne(targetEntity = Course.class, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "program_id")
-//    private List<Course> courses = new ArrayList<>();
+    @ManyToMany(targetEntity = Course.class, cascade = CascadeType.ALL)
+    private List<Course> courses = new ArrayList<>();
 
     private Instant createDate;
 
