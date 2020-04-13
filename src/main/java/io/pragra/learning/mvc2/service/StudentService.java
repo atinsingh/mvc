@@ -2,13 +2,16 @@ package io.pragra.learning.mvc2.service;
 
 import io.pragra.learning.mvc2.domain.Course;
 import io.pragra.learning.mvc2.domain.Student;
+import io.pragra.learning.mvc2.exceptions.NotFoundException;
 import io.pragra.learning.mvc2.exceptions.RequiredDataMissingException;
 import io.pragra.learning.mvc2.repo.CourseRepo;
 import io.pragra.learning.mvc2.repo.StudentRepo;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentService {
@@ -35,6 +38,25 @@ public class StudentService {
     }
 
     public List<Student> getAllStudent(){
+        if(studentRepo.findAll().size()==0){
+            throw new NotFoundException("No Data Found");
+        }
         return studentRepo.findAll();
+    }
+
+    public Student getStudentById(Long id) throws ChangeSetPersister.NotFoundException {
+        return studentRepo.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
+    }
+
+    public Course signUp(Long courseId, Long studentId) throws NotFoundException{
+        Optional<Course> byId = courseRepo.findById(courseId);
+        studentRepo.findById(studentId).ifPresent(student -> {
+            if(byId.isPresent()){
+                student.getCourses().add(byId.get());
+            }else{
+                throw new NotFoundException("Course with id "+ courseId +"Doesn't exists");
+            }
+        });
+        return byId.get();
     }
 }
