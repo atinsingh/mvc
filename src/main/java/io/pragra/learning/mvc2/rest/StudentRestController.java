@@ -4,6 +4,7 @@ import io.pragra.learning.mvc2.Error;
 import io.pragra.learning.mvc2.domain.Student;
 import io.pragra.learning.mvc2.exceptions.NotFoundException;
 import io.pragra.learning.mvc2.service.StudentService;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,9 +27,9 @@ public class StudentRestController {
     }
 
     @GetMapping(value = "/student", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAllStudent(){
+    public ResponseEntity<?> getAllStudent(@RequestParam(name = "limit", defaultValue = "0" ,required = false) int limit){
         try {
-            List<Student>students = service.getAllStudent();
+            List<Student>students = service.getAllStudent(limit);
             HttpHeaders headers = new HttpHeaders();
             headers.set("X-Reponder","Atin");
             return ResponseEntity
@@ -55,5 +56,15 @@ public class StudentRestController {
             );
         }
         return ResponseEntity.accepted().body(service.addStudent(student));
+    }
+
+    @PostMapping("/students")
+    public List<Student> saveAllStudent(@RequestBody List<Student> students){
+        return service.saveAlll(students);
+    }
+
+    @GetMapping(value = "/student/{id}")
+    public Student getStudentById(@PathVariable ("id") Long id)  {
+        return service.getStudentById(id);
     }
 }

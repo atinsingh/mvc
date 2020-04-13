@@ -40,7 +40,7 @@ class Mvc2ApplicationTests {
     @Test
     public void getStudentTC(){
         service.addStudent(new Student("Vivek"));
-        List<Student> allStudent = service.getAllStudent();
+        List<Student> allStudent = service.getAllStudent(-1);
         assertTrue(allStudent.size()>=1);
         Student student = allStudent.get(0);
         assertTrue(student.getCreateDate()!=null);

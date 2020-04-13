@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -37,15 +38,27 @@ public class StudentService {
 
     }
 
-    public List<Student> getAllStudent(){
+    public List<Student> saveAlll(List<Student> students){
+        return studentRepo.saveAll(students);
+    }
+
+    public List<Student> getAllStudent(int limit){
         if(studentRepo.findAll().size()==0){
             throw new NotFoundException("No Data Found");
         }
+        if(limit==0)
         return studentRepo.findAll();
+        else {
+            return studentRepo.findAll().stream().limit(limit).collect(Collectors.toList());
+        }
     }
 
-    public Student getStudentById(Long id) throws ChangeSetPersister.NotFoundException {
-        return studentRepo.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
+    public Student getStudentById(Long id) throws NotFoundException {
+        Optional<Student> byId = studentRepo.findById(id);
+        if(!byId.isPresent()){
+            throw new NotFoundException("Student with id "+ id +" Doesn't exists");
+        }
+        return byId.get();
     }
 
     public Course signUp(Long courseId, Long studentId) throws NotFoundException{
