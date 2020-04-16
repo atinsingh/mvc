@@ -6,6 +6,8 @@ import io.pragra.learning.mvc2.exceptions.NotFoundException;
 import io.pragra.learning.mvc2.service.StudentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,7 +31,13 @@ public class StudentRestController {
         this.service = service;
     }
 
-    @ApiOperation(value = "GetStudent", response = List.class,code = 200)
+    @ApiOperation(value = "GetStudents")
+    @ApiResponses({
+            @ApiResponse(code = 200, response = Student.class, message = "List of Student"),
+            @ApiResponse(code = 400, message = "No DataFound", response = Error.class),
+            @ApiResponse(code=500,message = "Something went wrong in processing", response = Error.class)
+        }
+    )
     @GetMapping(value = "/student", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllStudent(@RequestParam(name = "limit", defaultValue = "0" ,required = false) int limit){
         try {

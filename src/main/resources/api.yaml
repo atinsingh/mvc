@@ -1,0 +1,91 @@
+swagger: '2.0'
+info:
+  title: DemoWork
+  version: "1"
+host: dev01.api.t-mobile.com
+schemes:
+  - http
+paths:
+  /studentinfo:
+    get:
+      tags:
+        - Students
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: validate service agreement passed successfully.
+          schema:
+            $ref: '#/definitions/StudentInfo'
+
+        '400':
+          description: Bad Request.
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              code: '400'
+              userMessage: Bad Request
+              systemMessage: Bad Request
+              detailLink: 'http://www.tmus.com'
+          headers: {}
+        '401':
+          description: Unauthorized.
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              code: '401'
+              userMessage: Unauthorized
+              systemMessage: Unauthorized
+              detailLink: 'http://www.tmus.com'
+          headers: {}
+        '404':
+          description: Resource not found.
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              code: '404'
+              userMessage: Resource not found
+              systemMessage: Resource not found
+              detailLink: 'http://www.tmus.com'
+
+
+
+definitions:
+  Error:
+    description: Error object.
+    type: object
+    properties:
+      code:
+        description: A specific T-Mobile error code.
+        type: string
+      userMessage:
+        description: A human-readable message describing the error.
+        type: string
+      systemMessage:
+        description: Backend system error message.
+        type: string
+      requestUri:
+        description: Any.
+        type: string
+      traceId:
+        description: Any.
+        type: string
+  StudentInfo:
+    type: object
+    properties:
+      name:
+        type: string
+        maxLength: 30
+        example: Atin
+      id:
+        type: integer
+        example: 10000
+        format: int64
+      address:
+        type: string
+
