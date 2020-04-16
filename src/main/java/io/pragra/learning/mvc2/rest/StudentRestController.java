@@ -4,6 +4,8 @@ import io.pragra.learning.mvc2.Error;
 import io.pragra.learning.mvc2.domain.Student;
 import io.pragra.learning.mvc2.exceptions.NotFoundException;
 import io.pragra.learning.mvc2.service.StudentService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
+@Api(tags = "Student")
 public class StudentRestController {
     private StudentService service;
 
@@ -26,6 +29,7 @@ public class StudentRestController {
         this.service = service;
     }
 
+    @ApiOperation(value = "GetStudent", response = List.class,code = 200)
     @GetMapping(value = "/student", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllStudent(@RequestParam(name = "limit", defaultValue = "0" ,required = false) int limit){
         try {
